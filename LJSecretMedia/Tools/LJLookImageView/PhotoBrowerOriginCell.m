@@ -10,6 +10,8 @@
 @interface PhotoBrowerOriginCell()<UIScrollViewDelegate>
 
 @property (nonatomic,strong) StatusBlock    tempBlock;
+@property (nonatomic,strong) StatusBlock    tempPlayBlock;
+@property (nonatomic,assign) BOOL           buttonHideState;
 
 @end
 @implementation PhotoBrowerOriginCell
@@ -36,6 +38,12 @@
                 [self zoomImage];
             }
         }];
+        [self.playButton addTargetClickHandler:^(UIButton *but, id obj) {
+            @strongify(self);
+            if (self.tempPlayBlock) {
+                self.tempPlayBlock(nil, nil);
+            }
+        }];
         [self addSubview:self.scrollView];
         self.backgroundColor = [UIColor blackColor];
     }
@@ -44,9 +52,14 @@
 - (void)reuse
 {
     self.scrollView.zoomScale = 1.0;
+    self.buttonHideState = self.playButton.hidden;
 }
 -(void)imageGestureHandler:(StatusBlock)handler{
     self.tempBlock=handler;
+}
+
+-(void)playButtonClickHandler:(StatusBlock)handler{
+    self.tempPlayBlock = handler;
 }
 
 
@@ -54,6 +67,14 @@
     CGFloat zoom=self.scrollView.zoomScale>1 ? 1 : 2.5;
     [UIView animateWithDuration:.5 animations:^{
         self.scrollView.zoomScale=zoom;
+    }completion:^(BOOL finished) {
+        if (!_buttonHideState) {
+            if (zoom <1.1) {
+                self.playButton.hidden = NO;
+            }else{
+                self.playButton.hidden = YES;
+            }
+        }
     }];
 }
 
@@ -61,6 +82,7 @@
 {
     self.scrollView.frame = self.bounds;
     self.imageView.frame = self.bounds;
+    self.playButton.frame = CGRectMake(self.lj_width/2-30, self.lj_height/2-30, 60, 60);
 }
 
 - (UIScrollView *)scrollView
@@ -68,6 +90,7 @@
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc]init];
         [_scrollView addSubview:self.imageView];
+        [_scrollView addSubview:self.playButton];
         _scrollView.delegate = self;
         _scrollView.maximumZoomScale=3.0;
         _scrollView.minimumZoomScale=1.0;
@@ -80,6 +103,17 @@
     return [scrollView viewWithTag:500];
 }
 
+- (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view{
+    if (!_buttonHideState) {
+        self.playButton.hidden = YES;
+    }
+}
+
+-(void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
+    if (!_buttonHideState && scrollView.zoomScale<1.1 && scrollView.zoomScale>0) {
+        self.playButton.hidden = NO;
+    }
+}
 
 
 @end

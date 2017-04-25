@@ -12,6 +12,8 @@
 
 @property (weak, nonatomic) IBOutlet UIImageView *headImageView;
 @property (weak, nonatomic) IBOutlet UIButton *selectButton;
+@property (weak, nonatomic) IBOutlet UILabel *videoDurationTimeLabel;
+@property (weak, nonatomic) IBOutlet UIImageView *playImageView;
 
 -(void)longTapGestureHandler:(StatusBlock)handler;
 

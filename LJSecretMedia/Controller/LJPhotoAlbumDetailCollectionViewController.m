@@ -11,6 +11,7 @@
 #import "LJPhotoCollectionViewCell.h"
 #import "LJPHPhotoTools.h"
 #import "LJFileOperation.h"
+#import "TimeTools.h"
 
 
 @interface LJPhotoAlbumDetailCollectionViewController ()
@@ -60,6 +61,7 @@
             index++;
         }
     }
+    __block long long timestamp = [[TimeTools getCurrentTimestamp] longLongValue];
     __block NSMutableArray* assets=[NSMutableArray array];
     LJFileOperation* originOperation=[LJFileOperation shareOperationWithDocument:photoDictionary];
     LJFileOperation* thumbainOperation=[LJFileOperation shareOperationWithDocument:thumbnailDictionary];
@@ -67,14 +69,42 @@
         if ([obj boolValue]) {
             PHAsset* asset=self.images[idx];
             [assets addObject:asset];
-            __block NSString* tempName=nil;
-            [LJPHPhotoTools getImageDataWithAsset:asset handler:^(NSData *imageData, NSString* imageName) {
-                
-                tempName=imageName;
-                DLog(@"imageName=%@", imageName);
-                [originOperation saveObject:imageData name:imageName];
-            }];
+            NSString* tempName = [@((timestamp++)) stringValue];
+            DLog(@"tempName  == %@", tempName);
             
+            if (asset.mediaType == PHAssetMediaTypeVideo) {
+                tempName = [NSString stringWithFormat:@"%@.MOV", tempName];
+                PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+                options.version = PHImageRequestOptionsVersionCurrent;
+                options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+                NSString* videoFilePath = [originOperation readFilePath:tempName];
+                NSArray *assetResources = [PHAssetResource assetResourcesForAsset:asset];
+                PHAssetResource *resource;
+                for (PHAssetResource *assetRes in assetResources) {
+                    if (assetRes.type == PHAssetResourceTypePairedVideo ||
+                        assetRes.type == PHAssetResourceTypeVideo) {
+                        resource = assetRes;
+                    }
+                }
+                [[PHAssetResourceManager defaultManager] writeDataForAssetResource:resource
+                                                                            toFile:[NSURL fileURLWithPath:videoFilePath]
+                                                                           options:nil
+                                                                 completionHandler:^(NSError * _Nullable error)
+                {
+                    if (error) {
+                        DLog(@" 保存 视频 出错了 %@", error);
+                    } else {
+                        DLog(@" 保存 视频 成功 %@", videoFilePath);
+//                        NSData *data = [NSData dataWithContentsOfURL:[NSURL fileURLWithPath:PATH_MOVIE_FILE]];
+                    }
+                }];
+            }else{
+                [LJPHPhotoTools getImageDataWithAsset:asset handler:^(NSData *imageData, NSString* imageName) {
+                    
+                    DLog(@"imageName=%@", tempName);
+                    [originOperation saveObject:imageData name:tempName];
+                }];
+            }
             [LJPHPhotoTools getAsyncImageWithAsset:asset imageSize:CGSizeMake(IPHONE_WIDTH/1.5, IPHONE_WIDTH/1.5) handler:^(UIImage *image) {
                 index--;
                 DLog(@"imageName=%@", tempName);
@@ -120,8 +150,14 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     
     LJPhotoCollectionViewCell* cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
-    
-    [LJPHPhotoTools getAsyncImageWithAsset:self.images[indexPath.item] imageSize:CGSizeMake(IPHONE_WIDTH/1.5, IPHONE_WIDTH/1.5) handler:^(UIImage *image) {
+    PHAsset* sourceAsset = self.images[indexPath.item];
+    if (sourceAsset.duration > 0) {
+        cell.videoDurationTimeLabel.text = [TimeTools timestampChangeTimeStyle:sourceAsset.duration];
+        cell.videoDurationTimeLabel.hidden = NO;
+    }else{
+        cell.videoDurationTimeLabel.hidden = YES;
+    }
+    [LJPHPhotoTools getAsyncImageWithAsset:sourceAsset imageSize:CGSizeMake(IPHONE_WIDTH/1.5, IPHONE_WIDTH/1.5) handler:^(UIImage *image) {
         cell.headImageView.image=image;
     }];
     cell.selectButton.hidden=NO;

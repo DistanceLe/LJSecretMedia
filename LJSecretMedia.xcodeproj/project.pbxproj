@@ -27,6 +27,7 @@
 		2A6999A01D51D1990099506D /* PhotoBrowerOriginCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A69999D1D51D1990099506D /* PhotoBrowerOriginCell.m */; };
 		2AC420FD1D4AE79300D8F141 /* LJALAssetTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AC420FC1D4AE79300D8F141 /* LJALAssetTools.m */; };
 		2AC421001D4AEC1A00D8F141 /* LJPHPhotoTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AC420FF1D4AEC1A00D8F141 /* LJPHPhotoTools.m */; };
+		2AE3BF5F1EAF339600BEB723 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AE3BF5E1EAF339600BEB723 /* AVKit.framework */; };
 		2AF954481D498D6500FF11C9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AF954471D498D6500FF11C9 /* main.m */; };
 		2AF9544B1D498D6500FF11C9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AF9544A1D498D6500FF11C9 /* AppDelegate.m */; };
 		2AF954511D498D6500FF11C9 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2AF9544F1D498D6500FF11C9 /* Main.storyboard */; };
@@ -110,6 +111,7 @@
 		2AC420FC1D4AE79300D8F141 /* LJALAssetTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LJALAssetTools.m; sourceTree = "<group>"; };
 		2AC420FE1D4AEC1A00D8F141 /* LJPHPhotoTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LJPHPhotoTools.h; sourceTree = "<group>"; };
 		2AC420FF1D4AEC1A00D8F141 /* LJPHPhotoTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LJPHPhotoTools.m; sourceTree = "<group>"; };
+		2AE3BF5E1EAF339600BEB723 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		2AF954431D498D6500FF11C9 /* LJSecretMedia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LJSecretMedia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AF954471D498D6500FF11C9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		2AF954491D498D6500FF11C9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -169,6 +171,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2AE3BF5F1EAF339600BEB723 /* AVKit.framework in Frameworks */,
 				D1EA287751E7EA3CA7DA9F9C /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -324,6 +327,7 @@
 		2AF9547F1D499D1B00FF11C9 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				2AF954A31D49B45B00FF11C9 /* HeaderFiler */,
 				2A05F86B1D5C7B33004F36D4 /* LJPullDownView */,
 				2A2942E01D5B0A0300A5222C /* LJUIKit */,
 				2A6999971D51D1990099506D /* LJLookImageView */,
@@ -334,7 +338,6 @@
 				2AF954B91D49B7D100FF11C9 /* ImageTools */,
 				2AF954B51D49B7C000FF11C9 /* InfoAlert */,
 				2AF954AA1D49B48200FF11C9 /* FingerMark */,
-				2AF954A31D49B45B00FF11C9 /* HeaderFiler */,
 				2AF954841D499D1B00FF11C9 /* OptionPlistFile */,
 				2AF954881D499D1B00FF11C9 /* TimeStamp */,
 				2AF9548B1D499D1B00FF11C9 /* WeakSelf */,
@@ -472,6 +475,7 @@
 		F1BABE46046393315F58CB65 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2AE3BF5E1EAF339600BEB723 /* AVKit.framework */,
 				FBE7D34AAC0C765D9EE283A7 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -546,6 +550,7 @@
 				TargetAttributes = {
 					2AF954421D498D6500FF11C9 = {
 						CreatedOnToolsVersion = 7.3.1;
+						DevelopmentTeam = KKHXU36BGT;
 					};
 					2AF9545E1D498D6500FF11C9 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -823,8 +828,9 @@
 			baseConfigurationReference = B9B95DAABCBC57FF8C333C64 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = KKHXU36BGT;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = /Users/renjinkui/Desktop/LJSecretMedia/LJSecretMedia/Tools/HeaderFiler/PrefixHeader.pch;
+				GCC_PREFIX_HEADER = /Users/renjinkui/Desktop/GitHub/LJSecretMedia/LJSecretMedia/Tools/HeaderFiler/PrefixHeader.pch;
 				INFOPLIST_FILE = LJSecretMedia/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -838,8 +844,9 @@
 			baseConfigurationReference = 94811103371EC72A1BDFF796 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = KKHXU36BGT;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = /Users/renjinkui/Desktop/LJSecretMedia/LJSecretMedia/Tools/HeaderFiler/PrefixHeader.pch;
+				GCC_PREFIX_HEADER = /Users/renjinkui/Desktop/GitHub/LJSecretMedia/LJSecretMedia/Tools/HeaderFiler/PrefixHeader.pch;
 				INFOPLIST_FILE = LJSecretMedia/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

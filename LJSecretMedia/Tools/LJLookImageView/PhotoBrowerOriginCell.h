@@ -14,5 +14,6 @@
 
 - (void)reuse;
 - (void)imageGestureHandler:(StatusBlock)handler;
+- (void)playButtonClickHandler:(StatusBlock)handler;
 
 @end

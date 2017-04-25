@@ -98,4 +98,25 @@
     NSString *newDateString = [outputFormatter stringFromDate:formatterDate];
     return newDateString;
 }
+
++(NSString *)timestampChangeTimeStyle:(double)timestamp{
+    if (timestamp < 0)
+    {
+        return @"";
+    }
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    if (timestamp>=3600) {
+        [formatter setDateFormat:@"HH:mm:ss"];
+    }else{
+        [formatter setDateFormat:@"mm:ss"];
+    }
+    
+    [formatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
+    NSDate* date = [NSDate dateWithTimeIntervalSince1970:timestamp];
+    NSString* dateString = [formatter stringFromDate:date];
+    
+    return dateString;
+}
 @end

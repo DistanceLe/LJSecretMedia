@@ -10,7 +10,8 @@
 #import "PhotoBrowerOriginCell.h"
 #import "UIImageView+WebCache.h"
 #import "LJFileOperation.h"
-
+#import <AVKit/AVKit.h>
+#import <AVFoundation/AVFoundation.h>
 #define ScreenW [UIScreen mainScreen].bounds.size.width
 #define ScreenH [UIScreen mainScreen].bounds.size.height
 
@@ -25,7 +26,11 @@
 @property (nonatomic,assign) CGSize  thumbnailSize;
 
 @property (nonatomic,strong) LJFileOperation * operation;
+@property (nonatomic,strong) LJFileOperation * thumbnailOperation;
+
 @property (nonatomic,strong) PointBlock      tempHandler;
+@property (nonatomic,strong) StatusBlock     tempRemoveHandler;
+
 
 @end
 
@@ -47,6 +52,13 @@
     }
     return _operation;
 }
+-(LJFileOperation *)thumbnailOperation{
+    if (_thumbnailOperation==nil) {
+        _thumbnailOperation=[LJFileOperation shareOperationWithDocument:thumbnailDictionary];
+    }
+    return _thumbnailOperation;
+}
+
 -(void)dealloc{
     DLog(@"look Image Dealloc...");
 }
@@ -69,7 +81,7 @@
     _pageLabel.textAlignment=NSTextAlignmentCenter;
     [self addSubview:_pageLabel];
     
-    [[[[UIApplication sharedApplication]delegate]window]addSubview:self];
+//    [[[[UIApplication sharedApplication]delegate]window]addSubview:self];
 }
 -(void)willMoveToSuperview:(UIView *)newSuperview{
     CGRect myFrame=self.frame;
@@ -86,6 +98,9 @@
     [UIView animateWithDuration:.6 delay:0 usingSpringWithDamping:1 initialSpringVelocity:0 options:UIViewAnimationOptionCurveLinear animations:^{
         self.alpha=0;
         self.frame=CGRectMake(hidePoint.x-self.thumbnailSize.width/2, hidePoint.y-self.thumbnailSize.height/2, self.thumbnailSize.width, self.thumbnailSize.height);
+        if (self.tempRemoveHandler) {
+            self.tempRemoveHandler(nil, nil);
+        }
     } completion:^(BOOL finished) {
         self.hidden=YES;
         [self removeFromSuperview];
@@ -93,6 +108,9 @@
 }
 -(void)requestTheHidePoint:(PointBlock)handler{
     self.tempHandler=handler;
+}
+-(void)removeSelfHandler:(StatusBlock)handler{
+    self.tempRemoveHandler = handler;
 }
 -(void)showLookView{
     self.hidden=NO;
@@ -162,16 +180,32 @@
         NSURL * url = [NSURL URLWithString:self.dataSource[indexPath.item]];
         [cell.imageView sd_setImageWithURL:url placeholderImage:nil options:SDWebImageProgressiveDownload];
     }else{
+        NSString* imageName = self.imageNameArray[indexPath.item];
         //创建异步加载：
         dispatch_queue_t anyncQueue = dispatch_queue_create("anyncQueue", DISPATCH_QUEUE_SERIAL);
         dispatch_async(anyncQueue, ^{
-            NSData* imageData=[self.operation readObjectWithName:self.imageNameArray[indexPath.item]];
-            UIImage* image=[UIImage imageWithData:imageData];
-            dispatch_sync(dispatch_get_main_queue(), ^{
-                cell.imageView.image=image;
-            });
+            if ([imageName hasSuffix:@".MOV"]) {
+                NSData* imageData=[self.thumbnailOperation readObjectWithName:imageName];
+                UIImage* image=[UIImage imageWithData:imageData];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    cell.imageView.image=image;
+                    cell.playButton.hidden = NO;
+                });
+            }else{
+                NSData* imageData=[self.operation readObjectWithName:imageName];
+                UIImage* image=[UIImage imageWithData:imageData];
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    cell.imageView.image=image;
+                    cell.playButton.hidden = YES;
+                });
+            }
         });
-        
+        @weakify(self);
+        [cell playButtonClickHandler:^(id sender, id status) {
+            @strongify(self);
+            DLog(@"开始播放");
+            [self playVideo:imageName];
+        }];
 //        cell.imageView.image=[UIImage imageWithData:imageData];
 //        
 //        
@@ -206,7 +240,20 @@
 
 
 
-
+-(void)playVideo:(NSString*)videoName{
+    //videoURL使用的是NSURL的fileURLWithPath，
+    //而不是URLWithString，前者用来访问本地视频，后者用来访问网络视频
+    NSURL* url = [NSURL fileURLWithPath:[self.operation readFilePath:videoName]];
+    AVPlayerItem* item = [[AVPlayerItem alloc]initWithURL:url];
+    AVPlayer* player = [[AVPlayer alloc]initWithPlayerItem:item];
+    
+    AVPlayerViewController* playVC = [[AVPlayerViewController alloc]init];
+    playVC.player = player;
+    playVC.videoGravity = AVLayerVideoGravityResizeAspect;
+    
+    [self.superVC presentViewController:playVC animated:YES completion:nil];
+    [player play];
+}
 
 
 

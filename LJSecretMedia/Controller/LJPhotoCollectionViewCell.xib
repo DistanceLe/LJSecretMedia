@@ -1,9 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="10117" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12118" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12086"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
@@ -13,11 +17,18 @@
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                 <rect key="frame" x="0.0" y="0.0" width="198" height="187"/>
+                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="BzT-sp-ryI">
                         <rect key="frame" x="0.0" y="0.0" width="198" height="187"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </imageView>
+                    <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0:00" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LWb-BF-iap">
+                        <rect key="frame" x="161" y="163" width="28.5" height="16"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <button hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MYt-34-NJt">
                         <rect key="frame" x="156" y="0.0" width="42" height="42"/>
                         <constraints>
@@ -27,12 +38,22 @@
                         <state key="normal" image="pictureUnselected"/>
                         <state key="selected" image="pictureSelected"/>
                     </button>
+                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="play" translatesAutoresizingMaskIntoConstraints="NO" id="lOy-sx-0YR">
+                        <rect key="frame" x="74" y="68.5" width="50" height="50"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="50" id="s3W-hk-je6"/>
+                            <constraint firstAttribute="height" constant="50" id="trC-cw-wA2"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
-                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <constraints>
+                <constraint firstAttribute="trailing" secondItem="LWb-BF-iap" secondAttribute="trailing" constant="8" id="GmT-Oo-oSB"/>
+                <constraint firstItem="lOy-sx-0YR" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="He5-wx-gKH"/>
+                <constraint firstAttribute="bottom" secondItem="LWb-BF-iap" secondAttribute="bottom" constant="8" id="KiU-bZ-c2I"/>
                 <constraint firstAttribute="bottom" secondItem="BzT-sp-ryI" secondAttribute="bottom" id="Ny1-YQ-aHO"/>
+                <constraint firstItem="lOy-sx-0YR" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="OFz-vA-mgT"/>
                 <constraint firstAttribute="trailing" secondItem="MYt-34-NJt" secondAttribute="trailing" id="WYj-wB-cIi"/>
                 <constraint firstItem="BzT-sp-ryI" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="arf-5A-xGe"/>
                 <constraint firstItem="MYt-34-NJt" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="iIn-yS-Y5z"/>
@@ -42,13 +63,16 @@
             <size key="customSize" width="198" height="187"/>
             <connections>
                 <outlet property="headImageView" destination="BzT-sp-ryI" id="j5D-kt-HWC"/>
+                <outlet property="playImageView" destination="lOy-sx-0YR" id="Vaq-Gs-2YQ"/>
                 <outlet property="selectButton" destination="MYt-34-NJt" id="HCq-s3-O6X"/>
+                <outlet property="videoDurationTimeLabel" destination="LWb-BF-iap" id="4eK-4r-gNM"/>
             </connections>
-            <point key="canvasLocation" x="346" y="309.5"/>
+            <point key="canvasLocation" x="-280" y="-36.5"/>
         </collectionViewCell>
     </objects>
     <resources>
         <image name="pictureSelected" width="42" height="42"/>
         <image name="pictureUnselected" width="42" height="42"/>
+        <image name="play" width="200" height="200"/>
     </resources>
 </document>

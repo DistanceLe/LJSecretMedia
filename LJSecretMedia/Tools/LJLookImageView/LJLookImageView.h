@@ -12,6 +12,8 @@ typedef CGPoint(^PointBlock)(NSInteger index);
 
 @interface LJLookImageView : UIView
 
+@property(nonatomic, weak)UIViewController* superVC;
+
 /**  从网络下载图片，和NameArray 二选一 */
 @property(nonatomic, strong)NSArray* imageUrlArray;
 
@@ -29,5 +31,6 @@ typedef CGPoint(^PointBlock)(NSInteger index);
 
 /**  滑动图片后，小图片做相应的操作，并返回对应小图片 的中心位置 */
 -(void)requestTheHidePoint:(PointBlock)handler;
-
+/**  移除照片查看器后的回调 */
+-(void)removeSelfHandler:(StatusBlock)handler;
 @end

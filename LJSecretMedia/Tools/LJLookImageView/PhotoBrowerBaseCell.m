@@ -18,4 +18,15 @@
     }
     return _imageView;
 }
+
+-(UIButton*)playButton{
+    
+    if (!_playButton) {
+        _playButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [_playButton setImage:[UIImage imageNamed:@"play"] forState:UIControlStateNormal];
+    }
+    return _playButton;
+}
+
+
 @end

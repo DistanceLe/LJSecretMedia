@@ -10,4 +10,6 @@
 
 @interface PhotoBrowerBaseCell : UICollectionViewCell
 @property (nonatomic,strong) UIImageView * imageView;
+@property (nonatomic,strong) UIButton* playButton;
+
 @end

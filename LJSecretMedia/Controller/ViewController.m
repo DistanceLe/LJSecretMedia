@@ -159,19 +159,24 @@
 -(UICollectionViewCell*)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     LJPhotoCollectionViewCell* cell=[collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+    NSString* imageName = self.photosName[indexPath.item];
     if (self.thumbnailsCache.count == indexPath.item) {
-        NSData* imageData=[self.operation readObjectWithName:self.photosName[indexPath.item]];
+        NSData* imageData=[self.operation readObjectWithName:imageName];
         UIImage* image=[UIImage imageWithData:imageData];
         [self.thumbnailsCache addObject:image];
     }
     if (self.thumbnailsCache.count<=indexPath.item) {
-        NSData* imageData=[self.operation readObjectWithName:self.photosName[indexPath.item]];
+        NSData* imageData=[self.operation readObjectWithName:imageName];
         UIImage* image=[UIImage imageWithData:imageData];
         cell.headImageView.image=image;
     }else{
         cell.headImageView.image=self.thumbnailsCache[indexPath.item];
     }
-    
+    if ([imageName hasSuffix:@".MOV"]) {
+        cell.playImageView.hidden = NO;
+    }else{
+        cell.playImageView.hidden = YES;
+    }
     @weakify(self);
     [cell longTapGestureHandler:^(id sender, id status) {
         @strongify(self);
@@ -197,6 +202,7 @@
     CGPoint pointTo=[cell convertPoint:CGPointMake(cell.lj_width/2, cell.lj_height/2) toView:self.view];
     
     LJLookImageView* imageLookView=[[LJLookImageView alloc]initWithShowPoint:pointTo size:cell.lj_size];
+    imageLookView.superVC = self;
     imageLookView.imageNameArray=self.photosName;
     imageLookView.tapIndex=indexPath.item;
     [imageLookView showLookView];
@@ -217,6 +223,13 @@
         
         return pointTo;
     }];
+    @weakify(self);
+    [imageLookView removeSelfHandler:^(id sender, id status) {
+        @strongify(self);
+        [self.navigationController setNavigationBarHidden:NO animated:NO];
+    }];
+    [self.view addSubview:imageLookView];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
 #pragma mark - ================ cell出现时的动画 ==================
 //- (void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath {

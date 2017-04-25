@@ -29,4 +29,7 @@
 //时间转换星期
 +(NSString *)timeToweek:(NSString *)time;
 
+/**  数字转 时间样式 3600 -> HH:mm:ss（完整）*/
++(NSString*)timestampChangeTimeStyle:(double)timestamp;
+
 @end
