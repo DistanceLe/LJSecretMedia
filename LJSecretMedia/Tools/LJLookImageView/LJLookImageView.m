@@ -190,6 +190,7 @@
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     cell.imageView.image=image;
                     cell.playButton.hidden = NO;
+                    cell.playButton.enabled = YES;
                 });
             }else{
                 NSData* imageData=[self.operation readObjectWithName:imageName];
@@ -197,6 +198,7 @@
                 dispatch_sync(dispatch_get_main_queue(), ^{
                     cell.imageView.image=image;
                     cell.playButton.hidden = YES;
+                    cell.playButton.enabled = NO;
                 });
             }
         });

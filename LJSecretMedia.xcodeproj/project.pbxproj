@@ -71,6 +71,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		2ACBEF991EC051B900E58C50 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		2A05F8641D5C700C004F36D4 /* mark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mark.png; sourceTree = "<group>"; };
 		2A05F8661D5C79C8004F36D4 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
@@ -493,6 +506,7 @@
 				2AF954401D498D6500FF11C9 /* Frameworks */,
 				2AF954411D498D6500FF11C9 /* Resources */,
 				9DB71B92FF1ED052B37E0E4F /* Copy Pods Resources */,
+				2ACBEF991EC051B900E58C50 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -829,6 +843,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = KKHXU36BGT;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LJSecretMedia",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = /Users/renjinkui/Desktop/GitHub/LJSecretMedia/LJSecretMedia/Tools/HeaderFiler/PrefixHeader.pch;
 				INFOPLIST_FILE = LJSecretMedia/Info.plist;
@@ -845,6 +863,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = KKHXU36BGT;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/LJSecretMedia",
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = /Users/renjinkui/Desktop/GitHub/LJSecretMedia/LJSecretMedia/Tools/HeaderFiler/PrefixHeader.pch;
 				INFOPLIST_FILE = LJSecretMedia/Info.plist;

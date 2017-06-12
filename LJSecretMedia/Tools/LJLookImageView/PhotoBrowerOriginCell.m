@@ -68,7 +68,7 @@
     [UIView animateWithDuration:.5 animations:^{
         self.scrollView.zoomScale=zoom;
     }completion:^(BOOL finished) {
-        if (!_buttonHideState) {
+        if (self.playButton.enabled) {
             if (zoom <1.1) {
                 self.playButton.hidden = NO;
             }else{
@@ -110,7 +110,7 @@
 }
 
 -(void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
-    if (!_buttonHideState && scrollView.zoomScale<1.1 && scrollView.zoomScale>0) {
+    if (!_buttonHideState && self.playButton.enabled && scrollView.zoomScale<1.1 && scrollView.zoomScale>0) {
         self.playButton.hidden = NO;
     }
 }
