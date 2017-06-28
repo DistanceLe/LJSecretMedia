@@ -1,0 +1,7 @@
+language: Objective-C
+xcode_project: LJSecretMedia.xcworkspace # path to your xcodeproj folder
+xcode_scheme: LJSecretMediaTests
+
+os: osx
+
+osx_image: xcode8.3

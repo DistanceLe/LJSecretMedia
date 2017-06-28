@@ -1,4 +1,6 @@
-# LJSecretMedia
+# LJSecretMedia ![image](https://travis-ci.org/DistanceLe/LJSecretMedia.svg?branch=master)
+
+
 隐私相册: 需要指纹验证的 个人相册。
 
 #下面是效果图：

@@ -74,7 +74,14 @@
 -(void)initUI{
     self.title=@"照片墙";
     
-    LJAttachementLayout* layout=[[LJAttachementLayout alloc]init];
+    UICollectionViewFlowLayout* layout=[[UICollectionViewFlowLayout alloc]init];
+    NSInteger itemWidth=(IPHONE_WIDTH-9)/4;
+    layout.minimumInteritemSpacing = 3;
+    layout.minimumLineSpacing = 3;
+    layout.itemSize = CGSizeMake(itemWidth, itemWidth);
+    layout.sectionInset = UIEdgeInsetsMake(2, 0, 2, 0);
+    
+    
     self.collectionView=[[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height) collectionViewLayout:layout];
     self.collectionView.bounces=YES;
     self.collectionView.backgroundColor=[[UIColor lightGrayColor] colorWithAlphaComponent:0.3];
@@ -206,7 +213,9 @@
     imageLookView.imageNameArray=self.photosName;
     imageLookView.tapIndex=indexPath.item;
     [imageLookView showLookView];
+    @weakify(self);
     [imageLookView requestTheHidePoint:^CGPoint(NSInteger index) {
+        @strongify(self);
         BOOL isExit=NO;
         for (NSIndexPath* visibleIndexPath in self.collectionView.indexPathsForVisibleItems) {
             if (visibleIndexPath.item==index) {
@@ -223,7 +232,7 @@
         
         return pointTo;
     }];
-    @weakify(self);
+    
     [imageLookView removeSelfHandler:^(id sender, id status) {
         @strongify(self);
         [self.navigationController setNavigationBarHidden:NO animated:NO];
