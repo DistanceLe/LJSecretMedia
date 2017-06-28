@@ -295,7 +295,11 @@
     [photoOperation deleteObjectWithName:self.photosName[index]];
     [self.operation deleteObjectWithName:self.photosName[index]];
     [self.photosName removeObjectAtIndex:index];
-    [self.thumbnailsCache removeObjectAtIndex:index];
+    if (self.thumbnailsCache.count == self.photosName.count) {
+        [self.thumbnailsCache removeObjectAtIndex:index];
+    }else{
+        [self.thumbnailsCache removeAllObjects];
+    }
     [self.collectionView deleteItemsAtIndexPaths:@[[NSIndexPath indexPathForItem:index inSection:0]]];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self.collectionView reloadData];
