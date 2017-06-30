@@ -38,10 +38,10 @@ typedef void(^PHCompletionBlock)    (BOOL success);
 /**  获取默认的所有缩略图，100*100 也相当于屏幕的50*50 */
 +(void)getThumbnailImagesWithAssets:(NSArray<PHAsset*>*)assets handler:(PHImagesBlock)handler;
 
-/**  获取自定义大小的所有缩略图， 如果太大，可能造成内存爆满 */
+/**  获取自定义大小的所有缩略图， 如果图片太多太大，可能造成内存爆满 */
 +(void)getThumbnailImagesWithAssets:(NSArray<PHAsset*>*)assets imageSize:(CGSize)size handler:(PHImagesBlock)handler;
 
-/**  获取原始图片的二进制数据 */
+/**  获取原始图片(视频)的二进制数据 */
 +(void)getImageDataWithAsset:(PHAsset*)asset handler:(PHImageDataBlock)handler;
 
 /**  删除系统图片 */
@@ -53,6 +53,8 @@ typedef void(^PHCompletionBlock)    (BOOL success);
 /**  保存图片到自定义相册 */
 +(void)saveImage:(UIImage*)image toCustomAlbum:(NSString*)albumName handler:(PHCompletionBlock)handler;
 
+/**  保存沙盒视频文件到相册 */
++(void)saveVideoFromURL:(NSURL*)url toCustomAlbum:(NSString*)albumName handler:(PHCompletionBlock)handler;
 
 /**  从相机获取图片 */
 +(void)getImageFromCameraHandler:(PHImageBlock)handler;

@@ -62,9 +62,10 @@
         }
     }
     __block long long timestamp = [[TimeTools getCurrentTimestamp] longLongValue];
-    __block NSMutableArray* assets=[NSMutableArray array];
+    __block NSMutableArray* assets=[NSMutableArray array]; //用于删除相册图片的 assert索引
     LJFileOperation* originOperation=[LJFileOperation shareOperationWithDocument:photoDictionary];
     LJFileOperation* thumbainOperation=[LJFileOperation shareOperationWithDocument:thumbnailDictionary];
+    
     [self.selectedIndex enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([obj boolValue]) {
             PHAsset* asset=self.images[idx];
@@ -74,9 +75,9 @@
             
             if (asset.mediaType == PHAssetMediaTypeVideo) {
                 tempName = [NSString stringWithFormat:@"%@.MOV", tempName];
-                PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
-                options.version = PHImageRequestOptionsVersionCurrent;
-                options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
+//                PHVideoRequestOptions *options = [[PHVideoRequestOptions alloc] init];
+//                options.version = PHImageRequestOptionsVersionCurrent;
+//                options.deliveryMode = PHImageRequestOptionsDeliveryModeHighQualityFormat;
                 NSString* videoFilePath = [originOperation readFilePath:tempName];
                 NSArray *assetResources = [PHAssetResource assetResourcesForAsset:asset];
                 PHAssetResource *resource;
@@ -105,7 +106,7 @@
                     [originOperation saveObject:imageData name:tempName];
                 }];
             }
-            [LJPHPhotoTools getAsyncImageWithAsset:asset imageSize:CGSizeMake(IPHONE_WIDTH/1.5, IPHONE_WIDTH/1.5) handler:^(UIImage *image) {
+            [LJPHPhotoTools getAsyncImageWithAsset:asset imageSize:CGSizeMake(IPHONE_WIDTH, IPHONE_WIDTH) handler:^(UIImage *image) {
                 index--;
                 DLog(@"imageName=%@", tempName);
                 [thumbainOperation saveObject:image name:tempName];

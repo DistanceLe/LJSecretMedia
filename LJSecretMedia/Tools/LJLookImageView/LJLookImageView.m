@@ -10,6 +10,7 @@
 #import "PhotoBrowerOriginCell.h"
 #import "UIImageView+WebCache.h"
 #import "LJFileOperation.h"
+#import "LJImageTools.h"
 #import <AVKit/AVKit.h>
 #import <AVFoundation/AVFoundation.h>
 #define ScreenW [UIScreen mainScreen].bounds.size.width
@@ -194,9 +195,9 @@
                 });
             }else{
                 NSData* imageData=[self.operation readObjectWithName:imageName];
-                UIImage* image=[UIImage imageWithData:imageData];
+                
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    cell.imageView.image=image;
+                    cell.imageView.image=[LJImageTools animateGif:imageData];
                     cell.playButton.hidden = YES;
                     cell.playButton.enabled = NO;
                 });

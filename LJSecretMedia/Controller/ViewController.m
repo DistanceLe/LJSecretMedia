@@ -279,15 +279,30 @@
     }];
 }
 -(void)saveImageIndex:(NSInteger)index{
+    [ProgressHUD show:@"保存中..."];
     LJFileOperation* operation=[LJFileOperation shareOperationWithDocument:photoDictionary];
     NSData* imageData=[operation readObjectWithName:self.photosName[index]];
-    [LJPHPhotoTools saveImage:[UIImage imageWithData:imageData] toCustomAlbum:nil handler:^(BOOL success) {
-        if (success) {
-            [LJInfoAlert showInfo:@"保存成功" bgColor:nil];
-        }else{
-            [LJInfoAlert showInfo:@"保存失败" bgColor:nil];
-        }
-    }];
+    NSString* imageName = self.photosName[index];
+    if ([imageName hasSuffix:@"MOV"]) {
+        NSString* filePath = [operation readFilePath:imageName];
+        [LJPHPhotoTools saveVideoFromURL:[NSURL URLWithString:filePath] toCustomAlbum:nil handler:^(BOOL success) {
+            [ProgressHUD dismiss];
+            if (success) {
+                [LJInfoAlert showInfo:@"保存成功" bgColor:nil];
+            }else{
+                [LJInfoAlert showInfo:@"保存失败" bgColor:nil];
+            }
+        }];
+    }else{
+        [LJPHPhotoTools saveImage:[UIImage imageWithData:imageData] toCustomAlbum:nil handler:^(BOOL success) {
+            [ProgressHUD dismiss];
+            if (success) {
+                [LJInfoAlert showInfo:@"保存成功" bgColor:nil];
+            }else{
+                [LJInfoAlert showInfo:@"保存失败" bgColor:nil];
+            }
+        }];
+    }
 }
 
 -(void)deleteFileIndex:(NSInteger)index{

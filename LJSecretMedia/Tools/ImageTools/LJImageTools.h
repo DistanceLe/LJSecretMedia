@@ -42,7 +42,8 @@
 +(UIImage*)setBlurImage:(UIImage*)image blurAmount:(CGFloat)blur;
 +(UIImage*)blurryImage:(UIImage *)image withBlurLevel:(CGFloat)blur;
 
-
++(BOOL)isGifImage:(NSData*)imageData;
++(UIImage*)animateGif:(NSData*)imageData;
 
 
 

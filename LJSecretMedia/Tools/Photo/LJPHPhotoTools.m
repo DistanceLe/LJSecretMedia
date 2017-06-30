@@ -285,26 +285,59 @@
 
 +(void)getImageDataWithAsset:(PHAsset *)asset handler:(PHImageDataBlock)handler{
     
-    PHImageRequestOptions* option=[[PHImageRequestOptions alloc]init];
-    option.resizeMode=PHImageRequestOptionsResizeModeExact;//缩放模式
-    option.synchronous=NO;//是否同步
-    option.deliveryMode=PHImageRequestOptionsDeliveryModeFastFormat;//图片质量
-    option.networkAccessAllowed=NO;
-    
-    [[PHCachingImageManager defaultManager]requestImageDataForAsset:asset options:option resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info) {
+    if (asset.mediaType == PHAssetMediaTypeVideo){
+        //视频资源处理
         
-        if (handler) {
-            NSURL* imageURL=[info valueForKey:@"PHImageFileURLKey"];
-            NSArray* tempArray=[imageURL.absoluteString componentsSeparatedByString:@"/"];
-            NSString* imageName=nil;
-            if (tempArray.count) {
-                imageName=tempArray.lastObject;
-            }else{
-                imageName=[TimeTools getCurrentTimestamp];
+        NSArray *assetResources = [PHAssetResource assetResourcesForAsset:asset];
+        PHAssetResource *resource;
+        for (PHAssetResource *assetRes in assetResources) {
+            if (assetRes.type == PHAssetResourceTypePairedVideo ||
+                assetRes.type == PHAssetResourceTypeVideo) {
+                resource = assetRes;
             }
-            handler(imageData, imageName);
         }
-    }];
+        if (!resource) {
+            handler(nil, nil);
+        }
+        __block NSMutableData* videoDatas = [NSMutableData data];
+        [[PHAssetResourceManager defaultManager]requestDataForAssetResource:resource
+                                                                    options:nil
+                                                        dataReceivedHandler:^(NSData * _Nonnull data)
+        {
+            [videoDatas appendData:data];
+        } completionHandler:^(NSError * _Nullable error) {
+            if (error) {
+                DLog(@"获取视频资源失败：%@", error);
+                handler(nil, nil);
+            }else{
+                handler(videoDatas, @"MOV");
+            }
+        }];
+        
+    }else{
+        PHImageRequestOptions* option=[[PHImageRequestOptions alloc]init];
+        option.resizeMode=PHImageRequestOptionsResizeModeExact;//缩放模式
+        option.synchronous=NO;//是否同步
+        option.deliveryMode=PHImageRequestOptionsDeliveryModeFastFormat;//图片质量
+        option.networkAccessAllowed=NO;
+        
+        [[PHCachingImageManager defaultManager]requestImageDataForAsset:asset
+                                                                options:option
+                                                          resultHandler:^(NSData * _Nullable imageData, NSString * _Nullable dataUTI, UIImageOrientation orientation, NSDictionary * _Nullable info)
+         {
+            if (handler) {
+                NSURL* imageURL=[info valueForKey:@"PHImageFileURLKey"];
+                NSArray* tempArray=[imageURL.absoluteString componentsSeparatedByString:@"/"];
+                NSString* imageName=nil;
+                if (tempArray.count) {
+                    imageName=tempArray.lastObject;
+                }else{
+                    imageName=[TimeTools getCurrentTimestamp];
+                }
+                handler(imageData, imageName);
+            }
+        }];
+    }
 }
 
 #pragma mark - ================ C方法保存图片到相册 ==================
@@ -416,6 +449,71 @@
         }
     }];
 }
+
+/**  保存沙盒视频文件到相册 */
++(void)saveVideoFromURL:(NSURL*)url toCustomAlbum:(NSString*)albumName handler:(PHCompletionBlock)handler{
+    if (nil==albumName || [albumName isEqualToString:@""]) {
+        albumName=[NSBundle mainBundle].infoDictionary[@"CFBundleDisplayName"];
+    }
+    
+    PHAssetCollection *createdCollection = nil;
+    PHFetchResult<PHAssetCollection *> *collections = [PHAssetCollection fetchAssetCollectionsWithType:PHAssetCollectionTypeAlbum subtype:PHAssetCollectionSubtypeAlbumRegular options:nil];
+    //判断是否已经有同名的相册
+    for (PHAssetCollection *collection in collections) {
+        if ([collection.localizedTitle isEqualToString:albumName]) {
+            createdCollection = collection;
+            break;
+        }
+    }
+    if (!createdCollection) {
+        __block NSString *createdCollectionId = nil;
+        // 创建一个新的相册  同步操作
+        [[PHPhotoLibrary sharedPhotoLibrary] performChangesAndWait:^{
+            createdCollectionId = [PHAssetCollectionChangeRequest creationRequestForAssetCollectionWithTitle:albumName].placeholderForCreatedAssetCollection.localIdentifier;
+        } error:nil];
+        
+        // 创建完毕后再取出相册
+        createdCollection = [PHAssetCollection fetchAssetCollectionsWithLocalIdentifiers:@[createdCollectionId] options:nil].firstObject;
+    }
+    if (url == nil || createdCollection == nil) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            handler(NO);
+        });
+        return;
+    }
+    
+    __block NSString *createdAssetId = nil;
+    NSError* error=nil;
+    //同步 首先保存图片到系统相册
+    [[PHPhotoLibrary sharedPhotoLibrary]performChangesAndWait:^{
+        createdAssetId=[PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:url].placeholderForCreatedAsset.localIdentifier;
+    } error:&error];
+    PHFetchResult<PHAsset *> *createdAssets=[PHAsset fetchAssetsWithLocalIdentifiers:@[createdAssetId] options:nil];
+    if (error || !createdAssets) {
+        if (handler) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                handler(NO);
+            });
+        }
+        return;
+    }
+    
+    //最后 再保存图片到指定的相册
+    [[PHPhotoLibrary sharedPhotoLibrary]performChanges:^{
+        //取到指定的相册请求
+        PHAssetCollectionChangeRequest* request=[PHAssetCollectionChangeRequest changeRequestForAssetCollection:createdCollection];
+        //插入 图片，或者直接增加图片
+        [request insertAssets:createdAssets atIndexes:[NSIndexSet indexSetWithIndex:0]];
+    } completionHandler:^(BOOL success, NSError * _Nullable error) {
+        if (handler) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                handler(success);
+            });
+        }
+    }];
+}
+
+
 
 #pragma mark - ================ 从相机获取图片： ==================
 static char photoToolsKey;
