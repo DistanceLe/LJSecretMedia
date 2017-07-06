@@ -193,7 +193,28 @@
     PHImageRequestOptions* option=[[PHImageRequestOptions alloc]init];
     option.resizeMode=PHImageRequestOptionsResizeModeExact;//缩放模式
     option.synchronous=NO;//是否同步
-    option.deliveryMode=PHImageRequestOptionsDeliveryModeFastFormat;//图片质量
+    option.deliveryMode=PHImageRequestOptionsDeliveryModeOpportunistic;//图片质量
+    option.networkAccessAllowed=NO;
+    
+    [[PHCachingImageManager defaultManager]requestImageForAsset:asset
+                                                     targetSize:size
+                                                    contentMode:PHImageContentModeAspectFill
+                                                        options:option
+                                                  resultHandler:^(UIImage * _Nullable result,
+                                                                  NSDictionary * _Nullable info) {
+                                                      if (handler) {
+                                                          handler(result);
+                                                      }
+                                                  }];
+    
+    
+}
+
++(void)getHighQualityImageWithAsset:(PHAsset *)asset imageSize:(CGSize)size handler:(PHImageBlock)handler{
+    PHImageRequestOptions* option=[[PHImageRequestOptions alloc]init];
+    option.resizeMode=PHImageRequestOptionsResizeModeExact;//缩放模式
+    option.synchronous=NO;//是否同步
+    option.deliveryMode=PHImageRequestOptionsDeliveryModeHighQualityFormat;//图片质量
     option.networkAccessAllowed=NO;
     
     [[PHCachingImageManager defaultManager]requestImageForAsset:asset

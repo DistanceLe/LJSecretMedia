@@ -23,6 +23,7 @@
 
 @implementation LJPhotoAlbumDetailCollectionViewController
 
+/**  相册 详情，具体的所有相片 */
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -106,7 +107,7 @@
                     [originOperation saveObject:imageData name:tempName];
                 }];
             }
-            [LJPHPhotoTools getAsyncImageWithAsset:asset imageSize:CGSizeMake(IPHONE_WIDTH, IPHONE_WIDTH) handler:^(UIImage *image) {
+            [LJPHPhotoTools getHighQualityImageWithAsset:asset imageSize:CGSizeMake(IPHONE_WIDTH/1.5, IPHONE_WIDTH/1.5) handler:^(UIImage *image) {
                 index--;
                 DLog(@"imageName=%@", tempName);
                 [thumbainOperation saveObject:image name:tempName];

@@ -23,6 +23,7 @@
 
 @implementation LJPhotoAlbumTableViewController
 
+/**  相册列表 */
 - (void)viewDidLoad {
     [super viewDidLoad];
     

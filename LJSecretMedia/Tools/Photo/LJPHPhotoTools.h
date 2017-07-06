@@ -32,8 +32,10 @@ typedef void(^PHCompletionBlock)    (BOOL success);
 /**  获取单张图片，size：PHImageManagerMaximumSize  则是原始图片 */
 +(void)getImageWithAsset:(PHAsset*)asset imageSize:(CGSize)size handler:(PHImageBlock)handler;
 
-/**  异步获取单张图片，推荐使用该方法 */
+/**  异步获取单张图片(异步 可能会多张，tableView显示时推荐使用，最终显示的也是高质量的) */
 +(void)getAsyncImageWithAsset:(PHAsset*)asset imageSize:(CGSize)size handler:(PHImageBlock)handler;
+/**  异步获取单张图片(精确，高质量的) */
++(void)getHighQualityImageWithAsset:(PHAsset *)asset imageSize:(CGSize)size handler:(PHImageBlock)handler;
 
 /**  获取默认的所有缩略图，100*100 也相当于屏幕的50*50 */
 +(void)getThumbnailImagesWithAssets:(NSArray<PHAsset*>*)assets handler:(PHImagesBlock)handler;
