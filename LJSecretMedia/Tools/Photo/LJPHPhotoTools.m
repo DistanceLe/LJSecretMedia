@@ -16,8 +16,9 @@
 
 @property(nonatomic, strong)PHImageBlock tempImageBlock;
 
-
 @end
+
+
 @implementation LJPHPhotoTools
 
 /**             
@@ -36,6 +37,15 @@
  1> 负责执行对PHAssetCollection(相册)的【增删改】操作
  2> 这个类只能放在-[PHPhotoLibrary performChanges:completionHandler:] 或者 -[PHPhotoLibrary performChangesAndWait:error:]方法的block中使用
   */
+    
+static dispatch_queue_t concurrentQueue;
+#define asyncDispatch(code) dispatch_async(concurrentQueue, ^{ code });
+#define mainDispatch(code)  dispatch_sync(dispatch_get_main_queue(), ^{ code });
+    
++(void)load{
+    concurrentQueue = dispatch_queue_create("concurrentQueue", DISPATCH_QUEUE_CONCURRENT);
+}
+    
 #pragma mark - ================ PHPhoto判断对相册的权限 ==================
 +(BOOL)isHadAuthorization{
     BOOL author=NO;
@@ -133,45 +143,44 @@
 
 +(void)getOriginImagesWithAsset:(PHAsset *)asset handler:(PHOriginImageBlock)handler{
     //创建异步加载：
-    dispatch_queue_t anyncQueue = dispatch_queue_create("anyncQueue", DISPATCH_QUEUE_SERIAL);
-    dispatch_async(anyncQueue, ^{
-        
-        __block UIImage* tempImage=nil;
-        PHImageRequestOptions* option=[[PHImageRequestOptions alloc]init];
-        option.resizeMode=PHImageRequestOptionsResizeModeFast;//缩放模式
-        option.synchronous=YES;//是否同步
-        option.deliveryMode=PHImageRequestOptionsDeliveryModeFastFormat;//图片质量
-        option.networkAccessAllowed=NO;
-
-        
-        [[PHCachingImageManager defaultManager]requestImageForAsset:asset
-                                                        targetSize:PHImageManagerMaximumSize
-                                                       contentMode:PHImageContentModeAspectFit
-                                                           options:option
-                                                     resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
-                                                         if (result) {
-                                                             tempImage=result;
-                                                             DLog(@"========%@, %@\n\n", result, info);
-                                                         }
-                                                     }];
-        dispatch_sync(dispatch_get_main_queue(), ^{
-           
-           if (handler) {
-               handler(tempImage);
-           }
-         });
-    });
+    asyncDispatch(
+                  __block UIImage* tempImage=nil;
+                  PHImageRequestOptions* option=[[PHImageRequestOptions alloc]init];
+                  option.resizeMode=PHImageRequestOptionsResizeModeFast;//缩放模式
+                  option.synchronous=YES;//是否同步
+                  option.deliveryMode=PHImageRequestOptionsDeliveryModeFastFormat;//图片质量， synchronous YES时才有效
+                  option.networkAccessAllowed=NO;
+                  
+                  
+                  [[PHCachingImageManager defaultManager]requestImageForAsset:asset
+                                                                   targetSize:PHImageManagerMaximumSize
+                                                                  contentMode:PHImageContentModeAspectFit
+                                                                      options:option
+                                                                resultHandler:^(UIImage * _Nullable result, NSDictionary * _Nullable info) {
+                                                                    if (result) {
+                                                                        tempImage=result;
+                                                                        DLog(@"========%@, %@\n\n", result, info);
+                                                                    }
+                                                                }];
+                  mainDispatch(
+                               if (handler) {
+                                   handler(tempImage);
+                               })
+                  )
+    
+    
+    
 }
 
 +(void)getImageWithAsset:(PHAsset *)asset imageSize:(CGSize)size handler:(PHImageBlock)handler{
-        
+    
     __block UIImage* tempImage=nil;
     PHImageRequestOptions* option=[[PHImageRequestOptions alloc]init];
     option.resizeMode=PHImageRequestOptionsResizeModeExact;//缩放模式
     option.synchronous=YES;//是否同步
     option.deliveryMode=PHImageRequestOptionsDeliveryModeFastFormat;//图片质量
     option.networkAccessAllowed=NO;
-
+    
     [[PHCachingImageManager defaultManager]requestImageForAsset:asset
                                                      targetSize:size
                                                     contentMode:PHImageContentModeAspectFill
@@ -183,7 +192,6 @@
                                                           DLog(@"========%@, %@\n\n", result, info);
                                                       }
                                                   }];
-        
     if (handler) {
         handler(tempImage);
     }
@@ -233,10 +241,7 @@
 
 +(void)getThumbnailImagesWithAssets:(NSArray<PHAsset *> *)assets handler:(PHImagesBlock)handler{
     
-    //创建异步加载：
-    dispatch_queue_t anyncQueue = dispatch_queue_create("anyncQueue", DISPATCH_QUEUE_SERIAL);
-    dispatch_async(anyncQueue, ^{
-        
+    asyncDispatch(
        NSMutableArray* images=[NSMutableArray array];
        PHImageRequestOptions* option=[[PHImageRequestOptions alloc]init];
        option.resizeMode=PHImageRequestOptionsResizeModeFast;//缩放模式
@@ -258,22 +263,17 @@
                                                              }
                                                          }];
        }
-       dispatch_sync(dispatch_get_main_queue(), ^{
-           
-           if (handler) {
-               handler(images);
-           }
-       });
-    });
+       mainDispatch(
+                    if (handler) {
+                        handler(images);
+                    })
+    )
     
 }
 
 +(void)getThumbnailImagesWithAssets:(NSArray<PHAsset *> *)assets imageSize:(CGSize)size handler:(PHImagesBlock)handler{
     
-    //创建异步加载：
-    dispatch_queue_t anyncQueue = dispatch_queue_create("anyncQueue", DISPATCH_QUEUE_SERIAL);
-    dispatch_async(anyncQueue, ^{
-        
+    asyncDispatch(
         NSMutableArray* images=[NSMutableArray array];
         PHImageRequestOptions* option=[[PHImageRequestOptions alloc]init];
         option.resizeMode=PHImageRequestOptionsResizeModeExact;//缩放模式
@@ -295,13 +295,11 @@
                                                               }
                                                           }];
         }
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            
+        mainDispatch(
             if (handler) {
                 handler(images);
-            }
-        });
-    });
+            })
+        )
 }
 
 +(void)getImageDataWithAsset:(PHAsset *)asset handler:(PHImageDataBlock)handler{
@@ -319,6 +317,7 @@
         }
         if (!resource) {
             handler(nil, nil);
+            return;
         }
         __block NSMutableData* videoDatas = [NSMutableData data];
         [[PHAssetResourceManager defaultManager]requestDataForAssetResource:resource

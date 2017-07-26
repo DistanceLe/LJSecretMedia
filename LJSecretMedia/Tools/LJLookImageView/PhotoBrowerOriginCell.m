@@ -20,6 +20,8 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.imageView.contentMode=UIViewContentModeScaleAspectFit;
+        self.animationImageView.contentMode = UIViewContentModeScaleAspectFit;
+        self.animationImageView.hidden = YES;
         @weakify(self);
         [self.imageView addTapGestureHandler:^(UITapGestureRecognizer *tap, UIView *itself) {
             @strongify(self);
@@ -38,6 +40,27 @@
                 [self zoomImage];
             }
         }];
+        
+        //==========animation Image
+        [self.animationImageView addTapGestureHandler:^(UITapGestureRecognizer *tap, UIView *itself) {
+            @strongify(self);
+            if (tap.state==UIGestureRecognizerStateEnded) {
+                if (self.tempBlock) {
+                    self.tempBlock(tap, @(1));
+                }
+            }
+        }];
+        [self.animationImageView addDoubleTapGestureHandler:^(UITapGestureRecognizer *tap, UIView *itself) {
+            @strongify(self);
+            if (tap.state==UIGestureRecognizerStateEnded) {
+                if (self.tempBlock) {
+                    self.tempBlock(tap, @(2));
+                }
+                [self zoomImage];
+            }
+        }];
+        
+        
         [self.playButton addTargetClickHandler:^(UIButton *but, id obj) {
             @strongify(self);
             if (self.tempPlayBlock) {
@@ -82,6 +105,7 @@
 {
     self.scrollView.frame = self.bounds;
     self.imageView.frame = self.bounds;
+    self.animationImageView.frame = self.bounds;
     self.playButton.frame = CGRectMake(self.lj_width/2-30, self.lj_height/2-30, 60, 60);
 }
 
@@ -90,6 +114,7 @@
     if (!_scrollView) {
         _scrollView = [[UIScrollView alloc]init];
         [_scrollView addSubview:self.imageView];
+        [_scrollView addSubview:self.animationImageView];
         [_scrollView addSubview:self.playButton];
         _scrollView.delegate = self;
         _scrollView.maximumZoomScale=3.0;
@@ -100,7 +125,11 @@
 
 - (nullable UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
 {
-    return [scrollView viewWithTag:500];
+    UIView* subView = [scrollView viewWithTag:500];
+    if (subView.hidden) {
+        subView = [scrollView viewWithTag:1000];
+    }
+    return subView;
 }
 
 - (void)scrollViewWillBeginZooming:(UIScrollView *)scrollView withView:(UIView *)view{

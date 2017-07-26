@@ -452,17 +452,17 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
 
 +(UIImage *)setBlurImage:(UIImage *)originImage blurAmount:(CGFloat)blurAmount
 {
-    if (blurAmount < 0.0 || blurAmount > 1.0) {
-        blurAmount = 0.5;
-    }
+//    if (blurAmount < 0.0 || blurAmount > 1.0) {
+//        blurAmount = 0.5;
+//    }
     
-    int boxSize = (int)(blurAmount * 40);
-    boxSize = boxSize - (boxSize % 2) + 1;
+//    int boxSize = (int)(blurAmount * 40);
+//    boxSize = boxSize - (boxSize % 2) + 1;
     
     CGImageRef img = originImage.CGImage;
     
     vImage_Buffer inBuffer, outBuffer;
-    vImage_Error error;
+//    vImage_Error error;
     
     void *pixelBuffer;
     
@@ -482,15 +482,11 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
     outBuffer.height = CGImageGetHeight(img);
     outBuffer.rowBytes = CGImageGetBytesPerRow(img);
     
-    error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
+//    error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
     
-    if (!error) {
-        error = vImageBoxConvolve_ARGB8888(&outBuffer, &inBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
-        
-        if (!error) {
-            error = vImageBoxConvolve_ARGB8888(&inBuffer, &outBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
-        }
-    }
+//    if (!error) {
+//        error = vImageBoxConvolve_ARGB8888(&outBuffer, &inBuffer, NULL, 0, 0, boxSize, boxSize, NULL, kvImageEdgeExtend);
+//    }
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
     
@@ -512,7 +508,7 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
     free(pixelBuffer);
     CFRelease(inBitmapData);
     
-    CGColorSpaceRelease(colorSpace);
+//    CGColorSpaceRelease(colorSpace);
     CGImageRelease(imageRef);
     
     return returnImage;
@@ -531,7 +527,10 @@ static void addRoundedRectToPath(CGContextRef context, CGRect rect, float ovalWi
     CIContext* context=[CIContext contextWithOptions:nil];
     CGImageRef outImage = [context createCGImage:outputImage
                                         fromRect:[outputImage extent]];
-    return [UIImage imageWithCGImage:outImage];
+    UIImage* resultImage = [UIImage imageWithCGImage:outImage];
+    CGImageRelease(outImage);
+    
+    return resultImage;
 }
 
 

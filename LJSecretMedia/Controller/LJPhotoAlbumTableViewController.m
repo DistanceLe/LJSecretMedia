@@ -40,8 +40,9 @@
 
 -(void)initData{
     
+    @weakify(self);
     [LJPHPhotoTools getAllGroup:^(NSArray<PHAssetCollection *> *group, NSArray *posterImages, NSArray *groupNames, NSArray *groupCounts) {
-        
+        @strongify(self);
         self.albums=group;
         self.names=groupNames;
         self.posterImages=posterImages;

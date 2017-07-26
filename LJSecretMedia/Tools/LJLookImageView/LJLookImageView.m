@@ -11,6 +11,8 @@
 #import "UIImageView+WebCache.h"
 #import "LJFileOperation.h"
 #import "LJImageTools.h"
+#import "FLAnimatedImage.h"
+
 #import <AVKit/AVKit.h>
 #import <AVFoundation/AVFoundation.h>
 #define ScreenW [UIScreen mainScreen].bounds.size.width
@@ -26,6 +28,7 @@
 @property (nonatomic,assign) CGPoint showoPoint;
 @property (nonatomic,assign) CGSize  thumbnailSize;
 
+@property (nonatomic,strong)dispatch_queue_t concurrentQueue;
 @property (nonatomic,strong) LJFileOperation * operation;
 @property (nonatomic,strong) LJFileOperation * thumbnailOperation;
 
@@ -40,6 +43,7 @@
 - (instancetype)initWithShowPoint:(CGPoint)point size:(CGSize)size{
     self = [super init];
     if (self) {
+        self.concurrentQueue = dispatch_queue_create("lookImageQueue", DISPATCH_QUEUE_CONCURRENT);
         self.showoPoint=point;
         self.thumbnailSize=size;
         self.layer.masksToBounds=YES;
@@ -183,21 +187,39 @@
     }else{
         NSString* imageName = self.imageNameArray[indexPath.item];
         //创建异步加载：
-        dispatch_queue_t anyncQueue = dispatch_queue_create("anyncQueue", DISPATCH_QUEUE_SERIAL);
-        dispatch_async(anyncQueue, ^{
+        dispatch_async(self.concurrentQueue, ^{
             if ([imageName hasSuffix:@".MOV"]) {
                 NSData* imageData=[self.thumbnailOperation readObjectWithName:imageName];
                 UIImage* image=[UIImage imageWithData:imageData];
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    cell.imageView.image=image;
+                    cell.imageView.image = image;
+                    cell.imageView.hidden = NO;
+                    cell.animationImageView.hidden = YES;
+                    cell.animationImageView.animatedImage=nil;
+                    
                     cell.playButton.hidden = NO;
                     cell.playButton.enabled = YES;
                 });
             }else{
                 NSData* imageData=[self.operation readObjectWithName:imageName];
-                
+                UIImage* commonImage= nil;
+                FLAnimatedImage* image = [[FLAnimatedImage alloc]initWithAnimatedGIFData:imageData];
+                if (!image.frameCount) {
+                    commonImage = [UIImage imageWithData:imageData];
+                }
                 dispatch_sync(dispatch_get_main_queue(), ^{
-                    cell.imageView.image=[LJImageTools animateGif:imageData];
+                    if (commonImage) {
+                        cell.imageView.image = commonImage;
+                        cell.imageView.hidden = NO;
+                        cell.animationImageView.hidden = YES;
+                        cell.animationImageView.animatedImage=nil;
+                    }else{
+                        cell.imageView.image = nil;
+                        cell.imageView.hidden = YES;
+                        cell.animationImageView.hidden = NO;
+                        cell.animationImageView.animatedImage=image;
+                    }
+                    
                     cell.playButton.hidden = YES;
                     cell.playButton.enabled = NO;
                 });

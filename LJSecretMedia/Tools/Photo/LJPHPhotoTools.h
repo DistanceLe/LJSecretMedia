@@ -26,10 +26,10 @@ typedef void(^PHCompletionBlock)    (BOOL success);
 /**  获取一个相册的所有图片信息 */
 +(NSArray<PHAsset*>*)getAssetsInCollection:(PHAssetCollection*)collection;
 
-/**  获取单张原始图片 */
+/**  获取单张原始图片（异步） */
 +(void)getOriginImagesWithAsset:(PHAsset*)asset handler:(PHOriginImageBlock)handler;
 
-/**  获取单张图片，size：PHImageManagerMaximumSize  则是原始图片 */
+/**  获取单张图片(同步)，size：PHImageManagerMaximumSize  则是原始图片 */
 +(void)getImageWithAsset:(PHAsset*)asset imageSize:(CGSize)size handler:(PHImageBlock)handler;
 
 /**  异步获取单张图片(异步 可能会多张，tableView显示时推荐使用，最终显示的也是高质量的) */

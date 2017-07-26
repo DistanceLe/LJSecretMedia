@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "LJFingerMark.h"
+#import "KMCGeigerCounter.h"
 
 @interface AppDelegate ()
 
@@ -39,7 +40,8 @@
     // Override point for customization after application launch.
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.05*NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-       [self show];
+        [self show];
+        [KMCGeigerCounter sharedGeigerCounter].enabled = YES;
     });
     return YES;
 }

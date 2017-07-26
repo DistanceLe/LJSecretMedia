@@ -27,6 +27,10 @@
 		2A6999A01D51D1990099506D /* PhotoBrowerOriginCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2A69999D1D51D1990099506D /* PhotoBrowerOriginCell.m */; };
 		2AC420FD1D4AE79300D8F141 /* LJALAssetTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AC420FC1D4AE79300D8F141 /* LJALAssetTools.m */; };
 		2AC421001D4AEC1A00D8F141 /* LJPHPhotoTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AC420FF1D4AEC1A00D8F141 /* LJPHPhotoTools.m */; };
+		2ADC84BC1F2827DF0064FC57 /* KMCGeigerCounter.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ADC84BA1F2827DF0064FC57 /* KMCGeigerCounter.m */; };
+		2ADC84BD1F2827DF0064FC57 /* KMCGeigerCounterTick.aiff in Resources */ = {isa = PBXBuildFile; fileRef = 2ADC84BB1F2827DF0064FC57 /* KMCGeigerCounterTick.aiff */; };
+		2ADC84C31F2833AB0064FC57 /* FLAnimatedImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ADC84C01F2833AB0064FC57 /* FLAnimatedImage.m */; };
+		2ADC84C41F2833AB0064FC57 /* FLAnimatedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ADC84C21F2833AB0064FC57 /* FLAnimatedImageView.m */; };
 		2AE3BF5F1EAF339600BEB723 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2AE3BF5E1EAF339600BEB723 /* AVKit.framework */; };
 		2AF954481D498D6500FF11C9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AF954471D498D6500FF11C9 /* main.m */; };
 		2AF9544B1D498D6500FF11C9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 2AF9544A1D498D6500FF11C9 /* AppDelegate.m */; };
@@ -124,6 +128,13 @@
 		2AC420FC1D4AE79300D8F141 /* LJALAssetTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LJALAssetTools.m; sourceTree = "<group>"; };
 		2AC420FE1D4AEC1A00D8F141 /* LJPHPhotoTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LJPHPhotoTools.h; sourceTree = "<group>"; };
 		2AC420FF1D4AEC1A00D8F141 /* LJPHPhotoTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LJPHPhotoTools.m; sourceTree = "<group>"; };
+		2ADC84B91F2827DF0064FC57 /* KMCGeigerCounter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KMCGeigerCounter.h; sourceTree = "<group>"; };
+		2ADC84BA1F2827DF0064FC57 /* KMCGeigerCounter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMCGeigerCounter.m; sourceTree = "<group>"; };
+		2ADC84BB1F2827DF0064FC57 /* KMCGeigerCounterTick.aiff */ = {isa = PBXFileReference; lastKnownFileType = audio.aiff; path = KMCGeigerCounterTick.aiff; sourceTree = "<group>"; };
+		2ADC84BF1F2833AB0064FC57 /* FLAnimatedImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImage.h; sourceTree = "<group>"; };
+		2ADC84C01F2833AB0064FC57 /* FLAnimatedImage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImage.m; sourceTree = "<group>"; };
+		2ADC84C11F2833AB0064FC57 /* FLAnimatedImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FLAnimatedImageView.h; sourceTree = "<group>"; };
+		2ADC84C21F2833AB0064FC57 /* FLAnimatedImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FLAnimatedImageView.m; sourceTree = "<group>"; };
 		2AE3BF5E1EAF339600BEB723 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		2AF954431D498D6500FF11C9 /* LJSecretMedia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = LJSecretMedia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2AF954471D498D6500FF11C9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -271,6 +282,27 @@
 			path = Photo;
 			sourceTree = "<group>";
 		};
+		2ADC84B81F2827DF0064FC57 /* KMCGeigerCounter */ = {
+			isa = PBXGroup;
+			children = (
+				2ADC84B91F2827DF0064FC57 /* KMCGeigerCounter.h */,
+				2ADC84BA1F2827DF0064FC57 /* KMCGeigerCounter.m */,
+				2ADC84BB1F2827DF0064FC57 /* KMCGeigerCounterTick.aiff */,
+			);
+			path = KMCGeigerCounter;
+			sourceTree = "<group>";
+		};
+		2ADC84BE1F2833AB0064FC57 /* FLAnimatedImage */ = {
+			isa = PBXGroup;
+			children = (
+				2ADC84BF1F2833AB0064FC57 /* FLAnimatedImage.h */,
+				2ADC84C01F2833AB0064FC57 /* FLAnimatedImage.m */,
+				2ADC84C11F2833AB0064FC57 /* FLAnimatedImageView.h */,
+				2ADC84C21F2833AB0064FC57 /* FLAnimatedImageView.m */,
+			);
+			path = FLAnimatedImage;
+			sourceTree = "<group>";
+		};
 		2AF9543A1D498D6500FF11C9 = {
 			isa = PBXGroup;
 			children = (
@@ -340,6 +372,7 @@
 		2AF9547F1D499D1B00FF11C9 /* Tools */ = {
 			isa = PBXGroup;
 			children = (
+				2ADC84B81F2827DF0064FC57 /* KMCGeigerCounter */,
 				2AF954A31D49B45B00FF11C9 /* HeaderFiler */,
 				2A05F86B1D5C7B33004F36D4 /* LJPullDownView */,
 				2A2942E01D5B0A0300A5222C /* LJUIKit */,
@@ -461,6 +494,7 @@
 		2AF954B91D49B7D100FF11C9 /* ImageTools */ = {
 			isa = PBXGroup;
 			children = (
+				2ADC84BE1F2833AB0064FC57 /* FLAnimatedImage */,
 				2AF954BA1D49B7D100FF11C9 /* LJImageTools.h */,
 				2AF954BB1D49B7D100FF11C9 /* LJImageTools.m */,
 			);
@@ -605,6 +639,7 @@
 				2A05F8651D5C700C004F36D4 /* mark.png in Resources */,
 				2A18F1771D4F2A2E002AAD99 /* LJPhotoCollectionViewCell.xib in Resources */,
 				2AF954561D498D6500FF11C9 /* Assets.xcassets in Resources */,
+				2ADC84BD1F2827DF0064FC57 /* KMCGeigerCounterTick.aiff in Resources */,
 				2AF954511D498D6500FF11C9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -674,6 +709,7 @@
 				2AF954901D499D1B00FF11C9 /* LJOptionPlistFile.m in Sources */,
 				2AF954B31D49B4D500FF11C9 /* SecondViewController.m in Sources */,
 				2A4423991D58941400C26849 /* UIImage+LJ.m in Sources */,
+				2ADC84C41F2833AB0064FC57 /* FLAnimatedImageView.m in Sources */,
 				2AF954BC1D49B7D100FF11C9 /* LJImageTools.m in Sources */,
 				2AF954A91D49B45B00FF11C9 /* Foundation+Log.m in Sources */,
 				2A18F17A1D4F2F67002AAD99 /* LJPhotoAlbumTableViewController.m in Sources */,
@@ -687,6 +723,7 @@
 				2AF954AD1D49B48200FF11C9 /* LJFingerMark.m in Sources */,
 				2AF9544B1D498D6500FF11C9 /* AppDelegate.m in Sources */,
 				2AC421001D4AEC1A00D8F141 /* LJPHPhotoTools.m in Sources */,
+				2ADC84BC1F2827DF0064FC57 /* KMCGeigerCounter.m in Sources */,
 				2AF954541D498D6500FF11C9 /* LJSecretMedia.xcdatamodeld in Sources */,
 				2A69999E1D51D1990099506D /* LJLookImageView.m in Sources */,
 				2AF954B81D49B7C000FF11C9 /* LJInfoAlert.m in Sources */,
@@ -696,6 +733,7 @@
 				2AF9549D1D499D2400FF11C9 /* NSNotificationCenter+LJ.m in Sources */,
 				2A18F17D1D4F3743002AAD99 /* LJPhotoAlbumDetailCollectionViewController.m in Sources */,
 				2AF954911D499D1B00FF11C9 /* TimeTools.m in Sources */,
+				2ADC84C31F2833AB0064FC57 /* FLAnimatedImage.m in Sources */,
 				2A05F8711D5C8141004F36D4 /* LJSheetAlertView.m in Sources */,
 				2A2942E51D5B0A0E00A5222C /* LJButton_Google.m in Sources */,
 				2A18F1761D4F2A2E002AAD99 /* LJPhotoCollectionViewCell.m in Sources */,

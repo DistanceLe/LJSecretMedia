@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-
+#import "FLAnimatedImageView.h"
 @interface PhotoBrowerBaseCell : UICollectionViewCell
+
+@property (nonatomic,strong) FLAnimatedImageView * animationImageView;
 @property (nonatomic,strong) UIImageView * imageView;
 @property (nonatomic,strong) UIButton* playButton;
 
