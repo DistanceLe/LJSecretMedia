@@ -53,6 +53,7 @@
 
 -(void)initUI{
     self.tableView.rowHeight=60;
+    self.tableView.tableFooterView = [UIView new];
     [self.tableView reloadData];
 }
 
@@ -61,9 +62,9 @@
     return self.albums.count;
 }
 
--(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
-    return 0.001;
-}
+//-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section{
+//    return 0.001;
+//}
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {

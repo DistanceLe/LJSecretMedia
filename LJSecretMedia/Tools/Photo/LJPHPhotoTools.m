@@ -96,6 +96,7 @@ static dispatch_queue_t concurrentQueue;
         
         PHFetchResult* result=[PHAsset fetchAssetsInAssetCollection:sub options:nil];
         NSInteger count=[result countOfAssetsWithMediaType:PHAssetMediaTypeImage];
+        count += [result countOfAssetsWithMediaType:PHAssetMediaTypeVideo];
         [counts addObject:@(count)];
         
         if (count>0) {
