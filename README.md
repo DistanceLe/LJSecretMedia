@@ -5,5 +5,5 @@
 
 #下面是效果图：
 
-![image](https://github.com/DistanceLe/Images/raw/master/MediaSmall.gif)
+![image](https://github.com/DistanceLe/Images/raw/master/MediaSmall.png)
 
