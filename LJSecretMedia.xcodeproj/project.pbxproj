@@ -598,7 +598,7 @@
 				TargetAttributes = {
 					2AF954421D498D6500FF11C9 = {
 						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = KKHXU36BGT;
+						DevelopmentTeam = QTZ635LNPY;
 					};
 					2AF9545E1D498D6500FF11C9 = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -615,8 +615,10 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
+				"zh-Hans",
 			);
 			mainGroup = 2AF9543A1D498D6500FF11C9;
 			productRefGroup = 2AF954441D498D6500FF11C9 /* Products */;
@@ -880,13 +882,13 @@
 			baseConfigurationReference = B9B95DAABCBC57FF8C333C64 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = KKHXU36BGT;
+				DEVELOPMENT_TEAM = QTZ635LNPY;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/LJSecretMedia",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = /Users/renjinkui/Desktop/GitHub/LJSecretMedia/LJSecretMedia/Tools/HeaderFiler/PrefixHeader.pch;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/LJSecretMedia/Tools/HeaderFiler/PrefixHeader.pch";
 				INFOPLIST_FILE = LJSecretMedia/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -900,13 +902,13 @@
 			baseConfigurationReference = 94811103371EC72A1BDFF796 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = KKHXU36BGT;
+				DEVELOPMENT_TEAM = QTZ635LNPY;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/LJSecretMedia",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = /Users/renjinkui/Desktop/GitHub/LJSecretMedia/LJSecretMedia/Tools/HeaderFiler/PrefixHeader.pch;
+				GCC_PREFIX_HEADER = "$(SRCROOT)/LJSecretMedia/Tools/HeaderFiler/PrefixHeader.pch";
 				INFOPLIST_FILE = LJSecretMedia/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
