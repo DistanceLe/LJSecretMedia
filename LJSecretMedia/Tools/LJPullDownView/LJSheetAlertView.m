@@ -38,7 +38,9 @@
 }
 
 -(void)initUI{
+    
     self.butBackView=[[UIView alloc]initWithFrame:CGRectMake(0, IPHONE_HEIGHT, IPHONE_WIDTH, (self.titles.count+1)*ButHeight+6)];
+    
     self.butBackView.backgroundColor=kRGBColor(200, 200, 200, 1);
     self.butBackView.layer.masksToBounds=YES;
     @weakify(self);
@@ -90,7 +92,7 @@
     
     
     [UIView animateWithDuration:0.3 animations:^{
-        self.butBackView.lj_y=IPHONE_HEIGHT-self.butBackView.lj_height;
+        self.butBackView.lj_y=IPHONE_HEIGHT-self.butBackView.lj_height-BottomSafeHeight;
     }];
 }
 

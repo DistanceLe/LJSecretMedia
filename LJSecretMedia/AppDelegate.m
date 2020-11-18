@@ -24,6 +24,7 @@
         _backView=[[UIImageView alloc]initWithFrame:CGRectMake(0, 0, IPHONE_WIDTH, IPHONE_HEIGHT)];
         _backView.userInteractionEnabled=YES;
         _backView.image=[UIImage imageNamed:@"backImage"];
+        _backView.contentMode = UIViewContentModeScaleAspectFill;
         @weakify(self);
         [_backView addTapGestureHandler:^(id sender, id status) {
             @strongify(self);

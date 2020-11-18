@@ -101,7 +101,9 @@ static dispatch_queue_t concurrentQueue;
         
         if (count>0) {
             [self getImageWithAsset:result.firstObject imageSize:CGSizeMake(200, 200) handler:^(UIImage *image) {
-                [images addObject:image];
+                if (image) {
+                    [images addObject:image];
+                }
             }];
         }else{
             [images addObject:[UIImage imageNamed:@"auth"]];

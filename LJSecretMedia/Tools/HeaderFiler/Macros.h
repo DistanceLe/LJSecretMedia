@@ -14,6 +14,14 @@
 
 #define AppDelegateInstance	 ([UIApplication sharedApplication].delegate)
 
+
+#define TopSafeHeight ([[UIApplication sharedApplication].delegate window].safeAreaInsets.top)
+#define BottomSafeHeight ([[UIApplication sharedApplication].delegate window].safeAreaInsets.bottom)
+
+
+
+
+
 //动态获取设备高度
 #define IPHONE_HEIGHT [UIScreen mainScreen].bounds.size.height
 //动态获取设备宽度

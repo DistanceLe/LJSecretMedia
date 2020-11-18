@@ -78,7 +78,12 @@
         cell.detailTextLabel.font=[UIFont systemFontOfSize:13];
         cell.detailTextLabel.textColor=[[UIColor lightGrayColor]colorWithAlphaComponent:0.9];
     }
-    cell.imageView.image=self.posterImages[indexPath.row];
+    if (self.posterImages.count > indexPath.row) {
+        cell.imageView.image=self.posterImages[indexPath.row];
+    }else{
+        cell.imageView.image=[UIImage imageNamed:@"none"];
+    }
+    
     cell.textLabel.text=self.names[indexPath.row];
     cell.detailTextLabel.text=[NSString stringWithFormat:@"共%@张图片", self.imageCounts[indexPath.row]];
     
@@ -90,7 +95,7 @@
     if ([self.imageCounts[indexPath.row] integerValue]<1) {
         return;
     }
-    CGFloat itemWidth=(self.view.bounds.size.width-16)/3;
+    CGFloat itemWidth=(IPHONE_WIDTH-17)/3.0;
     UICollectionViewFlowLayout* layout=[[UICollectionViewFlowLayout alloc]init];
     layout.minimumLineSpacing=8;
     layout.minimumInteritemSpacing=8;
