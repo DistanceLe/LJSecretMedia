@@ -17,6 +17,7 @@
 #import "LJLookImageView.h"
 #import "TimeTools.h"
 #import "LJSheetAlertView.h"
+#import "FLAnimatedImage.h"
 
 @interface ViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 
@@ -26,6 +27,10 @@
 @property (nonatomic, strong) NSMutableArray   * thumbnailsCache;
 @property (nonatomic, strong) UICollectionView * collectionView;
 @property (nonatomic, strong) LJFileOperation  * operation;
+
+
+@property (nonatomic,weak)LJLookImageView* tempImageLookView;
+@property (nonatomic,strong) UIImageView* animationImageView;
 
 
 @end
@@ -207,16 +212,23 @@
         [self.selectedIndex replaceObjectAtIndex:indexPath.item withObject:@(cell.selectButton.selected)];
         return;
     }
+//    if (self.animationImageView) {
+//        return;
+//    }
+    
     LJPhotoCollectionViewCell* cell=(LJPhotoCollectionViewCell*)[collectionView cellForItemAtIndexPath:indexPath];
     cell.selectButton.selected=!cell.selectButton.selected;
     
     CGPoint pointTo=[cell convertPoint:CGPointMake(cell.lj_width/2, cell.lj_height/2) toView:self.view];
+    
+//    [self showAnimationImageWithIndex:indexPath point:pointTo size:cell.lj_size];
     
     LJLookImageView* imageLookView=[[LJLookImageView alloc]initWithShowPoint:pointTo size:cell.lj_size];
     imageLookView.superVC = self;
     imageLookView.imageNameArray=self.photosName;
     imageLookView.tapIndex=indexPath.item;
     [imageLookView showLookView];
+//    imageLookView.hidden = YES;
     @weakify(self);
     [imageLookView requestTheHidePoint:^CGPoint(NSInteger index) {
         @strongify(self);
@@ -241,6 +253,7 @@
         @strongify(self);
         [self.navigationController setNavigationBarHidden:NO animated:NO];
     }];
+//    self.tempImageLookView = imageLookView;
     [self.view addSubview:imageLookView];
     [self.navigationController setNavigationBarHidden:YES animated:NO];
 }
@@ -353,4 +366,49 @@
     });
 }
 
+-(void)showAnimationImageWithIndex:(NSIndexPath*)indexPath point:(CGPoint)point size:(CGSize)size{
+    self.animationImageView = [[UIImageView alloc]init];
+    self.animationImageView.layer.masksToBounds = YES;
+    self.animationImageView.contentMode=UIViewContentModeScaleAspectFit;
+    self.animationImageView.backgroundColor = [UIColor blackColor];
+    [self getAnimationImageWithIndex:indexPath.item];
+    
+//    [self setEqualFrameWithSubViw:self.animationImageView toSuperView:self];
+    [[[[UIApplication sharedApplication]delegate]window]addSubview:self.animationImageView];
+    self.animationImageView.frame = CGRectMake(point.x-size.width/2, point.y-size.height/2, size.width, size.height);
+    
+    [UIView animateWithDuration:10 animations:^{
+        self.animationImageView.frame = [UIScreen mainScreen].bounds;
+    } completion:^(BOOL finished) {
+        self.tempImageLookView.hidden = NO;
+        self.animationImageView.hidden = YES;
+        [self.animationImageView removeFromSuperview];
+        self.animationImageView = nil;
+    }];
+//    [UIView animateWithDuration:2 delay:0 usingSpringWithDamping:1 initialSpringVelocity:0 options:UIViewAnimationOptionCurveLinear animations:^{
+//        self.animationImageView.frame = [UIScreen mainScreen].bounds;
+//    } completion:^(BOOL finished) {
+//        self.tempImageLookView.hidden = NO;
+//        self.animationImageView.hidden = YES;
+//        [self.animationImageView removeFromSuperview];
+//    }];
+}
+-(void)getAnimationImageWithIndex:(NSInteger)index{
+    NSString* imageName = self.photosName[index];
+    if ([imageName hasSuffix:@".MOV"]) {
+        NSData* imageData=[[LJFileOperation shareOperationWithDocument:thumbnailDictionary] readObjectWithName:imageName];
+        UIImage* image=[UIImage imageWithData:imageData];
+        self.animationImageView.image = image;
+    }else{
+        NSData* imageData=[[LJFileOperation shareOperationWithDocument:photoDictionary] readObjectWithName:imageName];
+        UIImage* commonImage= nil;
+        FLAnimatedImage* image = [[FLAnimatedImage alloc]initWithAnimatedGIFData:imageData];
+        if (!image.frameCount) {
+            commonImage = [UIImage imageWithData:imageData];
+        }
+        if (commonImage) {
+            self.animationImageView.image = commonImage;
+        }
+    }
+}
 @end
