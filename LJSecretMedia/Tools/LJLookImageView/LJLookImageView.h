@@ -14,7 +14,7 @@ typedef CGPoint(^PointBlock)(NSInteger index);
 
 @property(nonatomic, weak)UIViewController* superVC;
 
-/**  从网络下载图片，和NameArray 二选一 */
+/**  从网络下载图片，和NameArray 二选一  暂时没用到*/
 @property(nonatomic, strong)NSArray* imageUrlArray;
 
 /**  在缓存里面取图片，和UrlArray 二选一 */

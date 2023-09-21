@@ -62,6 +62,10 @@
 }
 -(void)refreshDataReload:(BOOL)reload{
     self.photosName=[NSMutableArray arrayWithArray:[self.operation readAllFileName]];
+    [self.photosName sortUsingComparator:^NSComparisonResult(NSString*  _Nonnull obj1, NSString*  _Nonnull obj2) {
+        return [obj1 compare:obj2 options:NSNumericSearch];
+    }];
+    
     [self.selectedIndex removeAllObjects];
     for (NSInteger i=0; i<self.photosName.count; i++) {
         [self.selectedIndex addObject:@(NO)];
